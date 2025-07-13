@@ -30,9 +30,17 @@ import {
 import { useState } from "react"
 
 export default function CustomerLifecycleView() {
-  const [selectedStage, setSelectedStage] = useState("awareness")
+  const [selectedStage, setSelectedStage] = useState<StageId>("awareness")
 
-  const lifecycleStages = [
+
+  const lifecycleStages: {
+    id: StageId
+    name: string
+    icon: React.ElementType
+    color: "blue" | "purple" | "orange" | "red" | "green"
+    duration: string
+    description: string
+  }[] = [
     {
       id: "awareness",
       name: "Awareness",
@@ -99,8 +107,23 @@ export default function CustomerLifecycleView() {
     },
   ]
 
-  const getStageData = (stageId: string) => {
-    const stageDetails = {
+  type StageId =
+    | "awareness"
+    | "consideration"
+    | "application"
+    | "decision"
+    | "onboarding"
+    | "active"
+    | "retention"
+    | "completion"
+
+  const getStageData = (stageId: StageId) => {
+    const stageDetails: Record<StageId, {
+      touchpoints: { name: string; channel: string; frequency: string }[]
+      systems: string[]
+      metrics: { name: string; value: string; trend: string }[]
+      keyActivities: string[]
+    }> = {
       awareness: {
         touchpoints: [
           { name: "Ford Dealer Visit", channel: "Physical", frequency: "Initial" },
